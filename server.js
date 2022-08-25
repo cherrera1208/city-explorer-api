@@ -2,7 +2,9 @@
 
 //require an instance of Express like React needs to be imported
 const express = require('express');
-// const weatherData = require('./weather.json');
+
+//get json data
+const weatherData = require('./data/weather.json');
 // console.log(weatherData);
 
 //!require dotenv and invoke config - if installed
@@ -25,14 +27,33 @@ app.get('/', (request, response) => {
 //creating specific routes by attaching endpoint to URL param
 //request logs in the terminal, not the browser
 app.get('/weather', (request, response) => {
-  console.log(request);
-  response.send('weather page');
+  let city_name = request.query.city_name.toLowerCase();
+  let cityObj = weatherData.find(cityWeather => cityWeather.city_name.toLowerCase() === city_name);
+  let queriedCity = cityObj.data.map(cityWeather => {
+    return new Forecast(({
+      date: cityWeather.datetime,
+      description: cityWeather.weather.description
+    }));
+  });
+  response.send({ queriedCity });
+  console.log(queriedCity);
 });
 
-//catch-all star (*) route for errors, e.g. 404
+//catch-all star (*) route, error 404
 app.get('*', (wreck, rez) => {
-  rez.send('404. now beat it');
+  rez.send('Wrong page. Now beat it. 404');
 });
+
+
+//errors
+
+//classes
+class Forecast {
+  constructor(cityWeather) {
+    this.date = cityWeather.date;
+    this.description = cityWeather.description;
+  }
+}
 
 //Express has access to listen method by way of app
 //pass PORT value
