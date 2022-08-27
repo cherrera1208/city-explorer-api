@@ -36,7 +36,7 @@ Actual time needed to complete: 20min
 
 ---
 
-Name of feature:
+Name of feature :
 
 Estimate of time needed to complete:
 
