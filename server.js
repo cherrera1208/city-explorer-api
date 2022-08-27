@@ -49,12 +49,14 @@ app.get('/weather', (request, response, next) => {
 });
 
 app.get('/movies', (request, response, next) => {
-  axios.get('https://api.themoviedb.org/3/search/movie', {
-    params: {
-      api_key: MOVIE_API_KEY,
-      query: request.query.city
-    }
-  }).then(function (movieData) {
+  console.log(`https://api.themoviedb.org/3/search/movie?api_key=${MOVIE_API_KEY}&query=${request.query.city}`);
+  axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${MOVIE_API_KEY}&query=${request.query.city}`
+    // params: {
+    //   api_key: MOVIE_API_KEY,
+    //   query: request.query.city
+    // }
+  ).then(function (movieData) {
+    console.log(movieData.data.results);
     let movieArr = movieData.data.results.map(movie => new Movie(movie));
     response.send(movieArr);
   }).catch(function (error) {
@@ -64,25 +66,10 @@ app.get('/movies', (request, response, next) => {
   });
 });
 
-
-
-// //     let city_name = request.query.city_name.toLowerCase();
-// //   let cityObj = weatherData.find(cityWeather => cityWeather.city_name.toLowerCase() === city_name);
-// //   let queriedCity = cityObj.data.map(cityWeather => {
-// //     return new Forecast(({
-// //       date: cityWeather.datetime,
-// //       description: cityWeather.weather.description
-// //     }));
-// //   });
-// //   response.send({ queriedCity });
-// //   console.log(queriedCity);
-// // });
-
 //catch-all star (*) route, error 404
 app.get('*', (wreck, rez) => {
   rez.send('Wrong page. Now beat it. 404');
 });
-
 
 //errors
 
